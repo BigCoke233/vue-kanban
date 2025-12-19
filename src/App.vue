@@ -1,45 +1,18 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+
+import { useCardStore } from './stores/cards';
+
 import KanbanBoard from './components/KanbanBoard.vue';
 import KanbanCard from './components/KanbanCard.vue';
 import KanbanColumn from './components/KanbanColumn.vue';
 
-const cards = ref([
-  {
-    id: 1,
-    title: 'Create Kanban Board',
-    description: 'Design and implement a Kanban board component',
-    status: 'To Do'
-  },
-  {
-    id: 2,
-    title: 'Implement Drag and Drop',
-    description: 'Add drag and drop functionality to the Kanban board',
-    status: 'To Do'
-  },
-  {
-    id: 3,
-    title: 'Design UI',
-    description: 'Design the user interface for the Kanban board',
-    status: 'In Progress'
-  },
-  {
-    id: 4,
-    title: 'Implement API',
-    description: 'Implement the API for the Kanban board',
-    status: 'In Progress'
-  },
-  {
-    id: 5,
-    title: 'Deploy to Production',
-    description: 'Deploy the Kanban board to production',
-    status: 'Done'
-  }
-]);
+const cardStore = useCardStore();
+const { getCardsByStatus, setCardStatus } = cardStore;
 
-const todoCards = computed(() => cards.value.filter(card => card.status === 'To Do'));
-const inProgressCards = computed(() => cards.value.filter(card => card.status === 'In Progress'));
-const doneCards = computed(() => cards.value.filter(card => card.status === 'Done'));
+const todoCards = computed(() => getCardsByStatus('To Do'));
+const inProgressCards = computed(() => getCardsByStatus('In Progress'));
+const doneCards = computed(() => getCardsByStatus('Done'));
 
 const columns = computed(() => ([
   {
@@ -60,9 +33,7 @@ const columns = computed(() => ([
 ]));
 
 function onDropCard({ id, toStatus }) {
-  const card = cards.value.find(c => c.id === Number(id))
-  if (!card) return
-  card.status = toStatus
+  setCardStatus(id, toStatus)
 }
 </script>
 
