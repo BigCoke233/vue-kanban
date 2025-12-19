@@ -34,7 +34,13 @@ const columns = computed(() => ([
 ]));
 
 function onDropCard({ id, toStatus }) {
-  setCardStatus(id, toStatus)
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      setCardStatus(id, toStatus)
+    })
+  } else {
+    setCardStatus(id, toStatus)
+  }
 }
 </script>
 
