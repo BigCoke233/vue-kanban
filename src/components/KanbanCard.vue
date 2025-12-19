@@ -1,5 +1,6 @@
 <script setup>
 import { Tag, Clock, BellElectric } from 'lucide-vue-next'
+import { computed } from 'vue'
 const emit = defineEmits(['dragstart', 'dragend'])
 const props = defineProps({
   data: Object,
@@ -18,6 +19,24 @@ function startDrag(e) {
 function onDragEnd() {
   emit('dragend', props.data)
 }
+
+function transformDate(dateString) {
+  if (!dateString) return ''
+  return new Intl.DateTimeFormat("zh-CN", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(dateString))
+}
+
+const createdDateString = computed(() => {
+  if (!props.data.created) return ''
+  return transformDate(props.data.created)
+})
+
+const dueDateString = computed(() => {
+  if (!props.data.due) return ''
+  return transformDate(props.data.due)
+})
 </script>
 
 <template>
@@ -43,9 +62,9 @@ function onDragEnd() {
     </section>
 
     <footer class="flex text-neutral-6 p-4 pt-0">
-      <div><Clock size="12" /> <time>{{ props.data.created }}</time></div>
+      <div v-if="props.data.created"><Clock size="12" /> <time>{{ createdDateString }}</time></div>
       <el-divider direction="vertical" />
-      <div><BellElectric size="12" /> {{ props.data.due }}</div>
+      <div v-if="props.data.due"><BellElectric size="12" /> {{ dueDateString }}</div>
     </footer>
   </div>
 </template>
