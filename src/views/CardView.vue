@@ -13,6 +13,7 @@ const data = getCardById(cardID);
 
 <template>
   <main class="my-20 w-3xl mx-auto">
-    <KanbanCard :style="{ viewTransitionName: 'card-' + cardID }" :data="data" />
+    <KanbanCard :data="data" />
+    <router-link to="/" class="-z-1 fixed inset-0 w-full h-full"></router-link>
   </main>
 </template>
