@@ -1,11 +1,12 @@
 <script setup>
 import { Tag, Clock, BellElectric } from 'lucide-vue-next'
+const emit = defineEmits(['dragstart', 'dragend'])
 const props = defineProps({
   data: {
     type: Object,
     required: true,
     default: () => ({
-      id: '1000',
+      id: 1,
       title: 'Dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien.',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       status: '',
@@ -17,25 +18,26 @@ const props = defineProps({
   }
 })
 
-function startDrag(e, item) {
-  e.dataTransfer.dropEffect = 'move'
+function startDrag(e) {
   e.dataTransfer.effectAllowed = 'move'
-  e.dataTransfer.setData('itemID', item.id)
+  e.dataTransfer.setData('itemID', String(props.data.id))
+  e.dataTransfer.setData('text/plain', String(props.data.id))
+  e.dataTransfer.setData('application/json', JSON.stringify(props.data))
+  emit('dragstart', props.data)
   console.log('Drag started')
 }
 
-function onDrop(e, list) {
-  const itemID = e.dataTransfer.getData('itemID')
-  const item = this.items.find((item) => item.id == itemID)
-  item.list = list
+function onDragEnd() {
+  emit('dragend', props.data)
 }
 </script>
 
 <template>
-  <div draggable
-  @dragstart="startDrag($event, props.data)"
-  @drop="onDrop($event, props.data.list)"
-  class=" bg-white shadow-md font-sans cursor-pointer select-none">
+  <div draggable="true"
+    @dragstart="startDrag"
+    @dragend="onDragEnd"
+    :id="`card-${props.data.id}`"
+    class=" bg-white shadow-md font-sans cursor-pointer select-none">
 
     <header class="flex gap-4 b-b-1 b-b-solid b-b-neutral-2">
       <div class="bg-emerald py-2 px-4 text-white font-extrabold font-mono">#{{ props.data.id }}</div>
