@@ -1,5 +1,6 @@
 <script setup>
 import { Tag, Clock, BellElectric } from 'lucide-vue-next'
+import { timeAgo } from 'humantime-js'
 import { computed } from 'vue'
 const emit = defineEmits(['dragstart', 'dragend'])
 const props = defineProps({
@@ -20,12 +21,24 @@ function onDragEnd() {
   emit('dragend', props.data)
 }
 
-function transformDate(dateString) {
-  if (!dateString) return ''
-  return new Intl.DateTimeFormat("zh-CN", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(new Date(dateString))
+function transformDate(date) {
+  if (!date) return ''
+
+  date = new Date(date)
+  if (new Date() - date < 1000 * 60 * 60 * 24 * 7) {
+    return timeAgo(date)
+  } else {
+    let result = new Intl.DateTimeFormat("zh-CN", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(date)
+
+    if (date.getFullYear() === new Date().getFullYear()) {
+      result = result.substring(5)
+    }
+
+    return result
+  }
 }
 
 const createdDateString = computed(() => {
@@ -61,7 +74,7 @@ const dueDateString = computed(() => {
       <h2 class="m-0 font-extrabold text-3xl">{{ props.data.title }}</h2>
     </section>
 
-    <footer class="flex text-neutral-6 p-4 pt-0">
+    <footer class="flex text-neutral-4 text-sm font-mono p-4 pt-0">
       <div v-if="props.data.created"><Clock size="12" /> <time>{{ createdDateString }}</time></div>
       <el-divider direction="vertical" />
       <div v-if="props.data.due"><BellElectric size="12" /> {{ dueDateString }}</div>
