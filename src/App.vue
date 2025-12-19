@@ -6,6 +6,7 @@ import { useCardStore } from './stores/cards';
 import KanbanBoard from './components/KanbanBoard.vue';
 import KanbanCard from './components/KanbanCard.vue';
 import KanbanColumn from './components/KanbanColumn.vue';
+import CreateButton from './components/CreateButton.vue';
 
 const cardStore = useCardStore();
 const { getCardsByStatus, setCardStatus } = cardStore;
@@ -44,6 +45,8 @@ function onDropCard({ id, toStatus }) {
         <KanbanCard v-for="card in column.cards" :key="card.id" :data="card" />
       </KanbanColumn>
     </KanbanBoard>
+
+    <CreateButton />
   </main>
 </template>
 

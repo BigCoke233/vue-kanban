@@ -67,9 +67,30 @@ export const useCardStore = defineStore('cards', () => {
     return cards.value.filter(card => card.status === status);
   }
 
+  function create(card) {
+    const newCard = {
+      id: cards.value.length + 1,
+      title: card.title || '未命名卡片',
+      description: card.description,
+      status: card.status || 'To Do',
+      tags: card.tags || [],
+      priority: card.priority || 'Low',
+      due: card.due,
+    }
+    cards.value.push(newCard)
+  }
+
+  function remove(id) {
+    const index = cards.value.findIndex(c => c.id === Number(id))
+    if (index === -1) return
+    cards.value.splice(index, 1)
+  }
+
   return {
     cards,
     getCardsByStatus,
-    setCardStatus
+    setCardStatus,
+    create,
+    remove,
   }
 })
