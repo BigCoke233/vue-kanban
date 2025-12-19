@@ -85,6 +85,7 @@ export const useCardStore = defineStore('cards', () => {
       tags: card.tags || [],
       priority: card.priority || 1,
       due: card.due,
+      created: new Date()
     }
     cards.value.push(newCard)
   }
