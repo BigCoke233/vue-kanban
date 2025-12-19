@@ -26,7 +26,7 @@ function onDragEnd() {
     @dragend="onDragEnd"
     :id="`card-${props.data.id}`"
     class=" bg-white shadow-md font-sans cursor-pointer select-none"
-    :style="props.style">
+    :style="{ ...props.style, viewTransitionName: `card-${props.data.id}` }">
 
     <header class="flex gap-4 b-b-1 b-b-solid b-b-neutral-2">
       <div class="bg-emerald py-2 px-4 text-white font-extrabold font-mono">#{{ props.data.id }}</div>

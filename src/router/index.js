@@ -16,4 +16,14 @@ const router = createRouter({
   ],
 })
 
+router.beforeResolve((to, from, next) => {
+  if (!document.startViewTransition) {
+    next();
+    return;
+  }
+  document.startViewTransition(() => {
+    next();
+  });
+});
+
 export default router
