@@ -9,31 +9,36 @@ export const useCardStore = defineStore('cards', () => {
       id: 1,
       title: 'Create Kanban Board',
       description: 'Design and implement a Kanban board component',
-      status: 'To Do'
+      status: 'To Do',
+      priority: 1
     },
     {
       id: 2,
       title: 'Implement Drag and Drop',
       description: 'Add drag and drop functionality to the Kanban board',
-      status: 'To Do'
+      status: 'To Do',
+      priority: 2
     },
     {
       id: 3,
       title: 'Design UI',
       description: 'Design the user interface for the Kanban board',
-      status: 'In Progress'
+      status: 'In Progress',
+      priority: 3
     },
     {
       id: 4,
       title: 'Implement API',
       description: 'Implement the API for the Kanban board',
-      status: 'In Progress'
+      status: 'In Progress',
+      priority: 1
     },
     {
       id: 5,
       title: 'Deploy to Production',
       description: 'Deploy the Kanban board to production',
-      status: 'Done'
+      status: 'Done',
+      priority: 3
     }
   ]);
 
@@ -74,7 +79,7 @@ export const useCardStore = defineStore('cards', () => {
       description: card.description,
       status: card.status || 'To Do',
       tags: card.tags || [],
-      priority: card.priority || 'Low',
+      priority: card.priority || 1,
       due: card.due,
     }
     cards.value.push(newCard)

@@ -11,7 +11,7 @@ const defaultData = {
   description: '',
   due: new Date(),
   tags: [],
-  priority: 'low',
+  priority: 1,
   status: 'To Do'
 }
 const form = ref({
@@ -60,9 +60,9 @@ function createCard() {
         </el-form-item>
         <el-form-item label="优先级">
           <el-radio-group v-model="form.priority" fill="rgb(52, 211, 153)">
-            <el-radio-button label="低" value="low" fill="#409EFF" />
-            <el-radio-button label="中" value="medium" fill="#67C23A" />
-            <el-radio-button label="高" value="high" fill="#F56C6C" />
+            <el-radio-button label="低" :value="1" />
+            <el-radio-button label="中" :value="2" />
+            <el-radio-button label="高" :value="3" />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态">
