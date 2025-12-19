@@ -1,3 +1,12 @@
+@view-transition {
+  navigation: auto;
+}
+
 body, html {
   margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }

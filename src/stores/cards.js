@@ -72,6 +72,10 @@ export const useCardStore = defineStore('cards', () => {
     return cards.value.filter(card => card.status === status);
   }
 
+  function getCardById(id) {
+    return cards.value.find(card => card.id === Number(id));
+  }
+
   function create(card) {
     const newCard = {
       id: cards.value.length + 1,
@@ -94,6 +98,7 @@ export const useCardStore = defineStore('cards', () => {
   return {
     cards,
     getCardsByStatus,
+    getCardById,
     setCardStatus,
     create,
     remove,

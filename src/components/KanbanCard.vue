@@ -2,7 +2,8 @@
 import { Tag, Clock, BellElectric } from 'lucide-vue-next'
 const emit = defineEmits(['dragstart', 'dragend'])
 const props = defineProps({
-  data: Object
+  data: Object,
+  style: Object
 })
 
 function startDrag(e) {
@@ -24,7 +25,8 @@ function onDragEnd() {
     @dragstart="startDrag"
     @dragend="onDragEnd"
     :id="`card-${props.data.id}`"
-    class=" bg-white shadow-md font-sans cursor-pointer select-none">
+    class=" bg-white shadow-md font-sans cursor-pointer select-none"
+    :style="props.style">
 
     <header class="flex gap-4 b-b-1 b-b-solid b-b-neutral-2">
       <div class="bg-emerald py-2 px-4 text-white font-extrabold font-mono">#{{ props.data.id }}</div>
