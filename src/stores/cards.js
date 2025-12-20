@@ -71,7 +71,14 @@ export const useCardStore = defineStore('cards', () => {
   function getCardsByStatus(status) {
     return cards.value
       .filter((card) => card.status === status)
-      .sort((a, b) => (b.priority || 0) - (a.priority || 0))
+      .sort((a, b) => {
+        const priorityDiff = (b.priority || 0) - (a.priority || 0)
+        if (priorityDiff !== 0) return priorityDiff
+
+        const aDue = a.due ? new Date(a.due).getTime() : Infinity
+        const bDue = b.due ? new Date(b.due).getTime() : Infinity
+        return aDue - bDue
+      })
   }
 
   function getCardById(id) {

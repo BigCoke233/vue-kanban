@@ -1,6 +1,5 @@
 <script setup>
 import { Tag, Clock, BellElectric, AlertCircle } from 'lucide-vue-next'
-import { timeAgo } from 'humantime-js'
 import { computed } from 'vue'
 const emit = defineEmits(['dragstart', 'dragend'])
 const props = defineProps({
@@ -33,24 +32,40 @@ function transformDate(date) {
   if (!date) return ''
 
   date = new Date(date)
-  if (new Date() - date < 1000 * 60 * 60 * 24 * 7) {
-    return timeAgo(date)
-  } else {
-    let result = new Intl.DateTimeFormat('zh-CN', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-    }).format(date)
+  const now = new Date()
+  const diff = date - now
+  const absDiff = Math.abs(diff)
+  const oneDay = 1000 * 60 * 60 * 24
 
-    if (date.getFullYear() === new Date().getFullYear()) {
-      result = result.substring(5)
-    }
+  // If within 7 days, use relative time
+  if (absDiff < oneDay * 7) {
+    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
 
-    return result
+    const days = Math.round(diff / oneDay)
+    if (Math.abs(days) >= 1) return rtf.format(days, 'day')
+
+    const hours = Math.round(diff / (1000 * 60 * 60))
+    if (Math.abs(hours) >= 1) return rtf.format(hours, 'hour')
+
+    const minutes = Math.round(diff / (1000 * 60))
+    return rtf.format(minutes, 'minute')
   }
+
+  // Otherwise use absolute date
+  let result = new Intl.DateTimeFormat('zh-CN', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(date)
+
+  if (date.getFullYear() === new Date().getFullYear()) {
+    result = result.substring(5)
+  }
+
+  return result
 }
 
 const createdDateString = computed(() => {
-  if (!props.data.created) return ''
+  if (!props.data.created) return 'today'
   return transformDate(props.data.created)
 })
 
