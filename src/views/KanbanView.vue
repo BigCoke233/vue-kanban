@@ -1,37 +1,40 @@
 <script setup>
 import { computed } from 'vue'
 
-import { useCardStore } from '@/stores/cards';
+import { useCardStore } from '@/stores/cards'
 
-import KanbanBoard from '@/components/KanbanBoard.vue';
-import KanbanCard from '@/components/KanbanCard.vue';
-import KanbanColumn from '@/components/KanbanColumn.vue';
-import CreateButton from '@/components/CreateButton.vue';
+import KanbanBoard from '@/components/KanbanBoard.vue'
+import KanbanCard from '@/components/KanbanCard.vue'
+import KanbanColumn from '@/components/KanbanColumn.vue'
+import CreateButton from '@/components/CreateButton.vue'
 
-const cardStore = useCardStore();
-const { getCardsByStatus, setCardStatus } = cardStore;
+const cardStore = useCardStore()
+const { getCardsByStatus, setCardStatus } = cardStore
 
-const todoCards = computed(() => getCardsByStatus('To Do'));
-const inProgressCards = computed(() => getCardsByStatus('In Progress'));
-const doneCards = computed(() => getCardsByStatus('Done'));
+const todoCards = computed(() => getCardsByStatus('To Do'))
+const inProgressCards = computed(() => getCardsByStatus('In Progress'))
+const doneCards = computed(() => getCardsByStatus('Done'))
 
-const columns = computed(() => ([
+const columns = computed(() => [
   {
     id: 1,
     title: 'To Do',
-    cards: todoCards.value
+    cards: todoCards.value,
+    color: 'bg-emerald',
   },
   {
     id: 2,
     title: 'In Progress',
-    cards: inProgressCards.value
+    cards: inProgressCards.value,
+    color: 'bg-blue',
   },
   {
     id: 3,
     title: 'Done',
-    cards: doneCards.value
-  }
-]));
+    cards: doneCards.value,
+    color: 'bg-purple',
+  },
+])
 
 function onDropCard({ id, toStatus }) {
   if (document.startViewTransition) {
@@ -47,9 +50,24 @@ function onDropCard({ id, toStatus }) {
 <template>
   <main class="w-full mx-auto">
     <KanbanBoard>
-      <KanbanColumn v-for="column in columns" :key="column.id" :title="column.title" @drop-card="onDropCard">
-        <router-link :to="`/${card.id}`" v-for="card in column.cards" :key="card.id" :style="card.style">
-          <KanbanCard :style="{ viewTransitionName: 'card-' + card.id }" :data="card" />
+      <KanbanColumn
+        v-for="column in columns"
+        :key="column.id"
+        :title="column.title"
+        :color="column.color"
+        @drop-card="onDropCard"
+      >
+        <router-link
+          :to="`/${card.id}`"
+          v-for="card in column.cards"
+          :key="card.id"
+          :style="card.style"
+        >
+          <KanbanCard
+            :style="{ viewTransitionName: 'card-' + card.id }"
+            :data="card"
+            :color="column.color"
+          />
         </router-link>
       </KanbanColumn>
     </KanbanBoard>

@@ -10,6 +10,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  color: {
+    type: String,
+    default: 'bg-emerald',
+  },
 })
 
 function startDrag(e) {
@@ -66,7 +70,7 @@ const dueDateString = computed(() => {
     :style="{ ...props.style, viewTransitionName: `card-${props.data.id}` }"
   >
     <header class="flex gap-4 b-b-1 b-b-solid b-b-neutral-2">
-      <div class="bg-emerald py-2 px-4 text-white font-extrabold font-mono">
+      <div :class="`py-2 px-4 text-white font-extrabold font-mono ${props.color}`">
         #{{ props.data.id }}
       </div>
       <div class="flex gap-3 py-2">

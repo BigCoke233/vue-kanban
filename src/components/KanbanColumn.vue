@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   title: String,
+  color: String,
 })
 const emit = defineEmits(['drop-card'])
 
@@ -26,7 +27,10 @@ function onDrop(e) {
 <template>
   <el-splitter-panel collapsible class="px-6" @dragover.prevent="onDragOver" @drop="onDrop">
     <header>
-      <h2 class="font-mono">{{ props.title }}</h2>
+      <h2 class="font-mono flex items-center gap-4">
+        <div class="w-4 h-4 rd-full" :class="props.color"></div>
+        <div>{{ props.title }}</div>
+      </h2>
     </header>
     <div class="flex flex-col gap-4"><slot /></div>
   </el-splitter-panel>
