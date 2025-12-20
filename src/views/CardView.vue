@@ -13,6 +13,17 @@ const cardID = Number(route.params.id)
 const store = useCardStore()
 const card = computed(() => store.getCardById(cardID))
 
+const statusColors = {
+  'To Do': 'bg-emerald',
+  'In Progress': 'bg-blue',
+  Done: 'bg-purple',
+}
+
+const cardColor = computed(() => {
+  if (!card.value) return 'bg-emerald'
+  return statusColors[card.value.status] || 'bg-emerald'
+})
+
 function deleteCard() {
   if (confirm('Are you sure you want to delete this card?')) {
     store.remove(cardID)
@@ -30,7 +41,7 @@ function deleteCard() {
       >
         <Trash2 :size="16" />
       </button>
-      <KanbanCard :data="card" :editable="true" />
+      <KanbanCard :data="card" :editable="true" :color="cardColor" />
     </section>
 
     <!-- Annotations -->
