@@ -20,13 +20,15 @@ const comments = computed(() => {
 
 function submitComment() {
   if (!newComment.value.trim()) return
-  store.addComment(props.cardId, newComment.value)
+  const { addComment } = store
+  addComment(props.cardId, newComment.value)
   newComment.value = ''
 }
 
 function deleteComment(commentId) {
   if (confirm('Delete this annotation?')) {
-    store.removeComment(props.cardId, commentId)
+    const { removeComment } = store
+    removeComment(props.cardId, commentId)
   }
 }
 
