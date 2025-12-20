@@ -69,7 +69,9 @@ export const useCardStore = defineStore('cards', () => {
   watch(cards, save, { deep: true })
 
   function getCardsByStatus(status) {
-    return cards.value.filter((card) => card.status === status)
+    return cards.value
+      .filter((card) => card.status === status)
+      .sort((a, b) => (b.priority || 0) - (a.priority || 0))
   }
 
   function getCardById(id) {

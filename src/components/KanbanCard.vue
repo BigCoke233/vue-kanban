@@ -1,5 +1,5 @@
 <script setup>
-import { Tag, Clock, BellElectric } from 'lucide-vue-next'
+import { Tag, Clock, BellElectric, AlertCircle } from 'lucide-vue-next'
 import { timeAgo } from 'humantime-js'
 import { computed } from 'vue'
 const emit = defineEmits(['dragstart', 'dragend'])
@@ -54,6 +54,31 @@ const createdDateString = computed(() => {
   return transformDate(props.data.created)
 })
 
+const isUrgent = computed(() => {
+  if (!props.data.due) return false
+  const due = new Date(props.data.due)
+  const now = new Date()
+  const diff = due - now
+  // Urgent if due within 24 hours (86400000 ms)
+  return diff > 0 && diff < 86400000
+})
+
+const remainingTime = computed(() => {
+  if (!props.data.due) return ''
+  const due = new Date(props.data.due)
+  const now = new Date()
+  const diff = due - now
+
+  if (diff <= 0) return 'Overdue'
+
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  if (hours < 24) {
+    return `${hours}h remaining`
+  }
+  const days = Math.floor(hours / 24)
+  return `${days}d remaining`
+})
+
 const dueDateString = computed(() => {
   if (!props.data.due) return ''
   return transformDate(props.data.due)
@@ -66,14 +91,33 @@ const dueDateString = computed(() => {
     @dragstart="startDrag"
     @dragend="onDragEnd"
     :id="`card-${props.data.id}`"
-    class="bg-white shadow-md font-sans cursor-pointer select-none"
+    class="bg-white shadow-md font-sans cursor-pointer select-none relative transition-all duration-300"
+    :class="{ 'shadow-red-200 shadow-lg border-2 border-red-500': isUrgent }"
     :style="{ ...props.style, viewTransitionName: `card-${props.data.id}` }"
   >
+    <div
+      v-if="isUrgent"
+      class="absolute -top-3 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md flex items-center gap-1 z-10 animate-pulse"
+    >
+      <Clock size="12" /> {{ remainingTime }}
+    </div>
+
     <header class="flex gap-4 b-b-1 b-b-solid b-b-neutral-2">
       <div :class="`py-2 px-4 text-white font-extrabold font-mono ${props.color}`">
         #{{ props.data.id }}
       </div>
-      <div class="flex gap-3 py-2">
+      <div class="flex gap-3 py-2 items-center">
+        <div
+          v-if="props.data.priority"
+          class="text-sm font-bold flex items-center gap-1"
+          :class="{
+            'text-red-600': props.data.priority >= 3,
+            'text-yellow-600': props.data.priority === 2,
+            'text-blue-600': props.data.priority <= 1,
+          }"
+        >
+          <AlertCircle size="12" /> P{{ props.data.priority }}
+        </div>
         <div
           v-for="tag in props.data.tags"
           :key="tag"
