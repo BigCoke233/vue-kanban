@@ -1,6 +1,8 @@
 <script setup>
 import { Tag, Clock, BellElectric, AlertCircle } from 'lucide-vue-next'
 import { computed } from 'vue'
+import { getRelativeTime } from '@/utils/time'
+
 const emit = defineEmits(['dragstart', 'dragend', 'update:data'])
 const props = defineProps({
   data: Object,
@@ -38,39 +40,7 @@ function onDragEnd() {
 }
 
 function transformDate(date) {
-  if (!date) return ''
-
-  date = new Date(date)
-  const now = new Date()
-  const diff = date - now
-  const absDiff = Math.abs(diff)
-  const oneDay = 1000 * 60 * 60 * 24
-
-  // If within 7 days, use relative time
-  if (absDiff < oneDay * 7) {
-    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
-
-    const days = Math.round(diff / oneDay)
-    if (Math.abs(days) >= 1) return rtf.format(days, 'day')
-
-    const hours = Math.round(diff / (1000 * 60 * 60))
-    if (Math.abs(hours) >= 1) return rtf.format(hours, 'hour')
-
-    const minutes = Math.round(diff / (1000 * 60))
-    return rtf.format(minutes, 'minute')
-  }
-
-  // Otherwise use absolute date
-  let result = new Intl.DateTimeFormat('zh-CN', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  }).format(date)
-
-  if (date.getFullYear() === new Date().getFullYear()) {
-    result = result.substring(5)
-  }
-
-  return result
+  return getRelativeTime(date)
 }
 
 const createdDateString = computed(() => {
@@ -182,8 +152,8 @@ const dueDateString = computed(() => {
         <Clock size="12" /> <time>{{ createdDateString }}</time>
       </div>
       <el-divider direction="vertical" />
-      <div v-if="!props.editable && props.data.due">
-        <BellElectric size="12" /> {{ dueDateString }}
+      <div v-if="!props.editable">
+        <BellElectric size="12" /> {{ dueDateString || '没有截止日期' }}
       </div>
       <div v-else-if="props.editable" class="flex items-center gap-1">
         <BellElectric size="12" />
