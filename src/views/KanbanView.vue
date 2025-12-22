@@ -7,6 +7,7 @@ import KanbanBoard from '@/components/KanbanBoard.vue'
 import KanbanCard from '@/components/KanbanCard.vue'
 import KanbanColumn from '@/components/KanbanColumn.vue'
 import CreateButton from '@/components/CreateButton.vue'
+import SearchButton from '@/components/SearchButton.vue'
 
 const cardStore = useCardStore()
 const { getCardsByStatus, setCardStatus } = cardStore
@@ -73,6 +74,7 @@ function onDropCard({ id, toStatus }) {
     </KanbanBoard>
 
     <CreateButton />
+    <SearchButton />
   </main>
 </template>
 
