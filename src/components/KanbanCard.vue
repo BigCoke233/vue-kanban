@@ -13,6 +13,10 @@ const props = defineProps({
     type: String,
     default: 'bg-emerald',
   },
+  draggable: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const localData = computed({
@@ -107,12 +111,15 @@ const dueDateString = computed(() => {
 
 <template>
   <div
-    draggable="true"
+    :draggable="props.draggable"
     @dragstart="startDrag"
     @dragend="onDragEnd"
     :id="`card-${props.data.id}`"
     class="bg-white shadow-md font-sans cursor-pointer select-none relative transition-all duration-300"
-    :class="{ 'shadow-red-200 shadow-lg border-2 border-red-500': isUrgent }"
+    :class="{
+      'shadow-red-200 shadow-lg border-2 border-red-500': isUrgent,
+      'cursor-default': !props.draggable,
+    }"
     :style="{ ...props.style, viewTransitionName: `card-${props.data.id}` }"
   >
     <div

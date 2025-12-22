@@ -41,7 +41,7 @@ function deleteCard() {
       >
         <Trash2 :size="16" />
       </button>
-      <KanbanCard :data="card" :editable="true" :color="cardColor" />
+      <KanbanCard :data="card" :editable="true" :color="cardColor" :draggable="false" />
     </section>
 
     <!-- Annotations -->
