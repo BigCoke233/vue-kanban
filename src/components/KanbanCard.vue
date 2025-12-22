@@ -1,7 +1,7 @@
 <script setup>
 import { Tag, Clock, BellElectric, AlertCircle } from 'lucide-vue-next'
 import { computed } from 'vue'
-const emit = defineEmits(['dragstart', 'dragend'])
+const emit = defineEmits(['dragstart', 'dragend', 'update:data'])
 const props = defineProps({
   data: Object,
   style: Object,
@@ -13,6 +13,11 @@ const props = defineProps({
     type: String,
     default: 'bg-emerald',
   },
+})
+
+const localData = computed({
+  get: () => props.data,
+  set: (val) => emit('update:data', val),
 })
 
 function startDrag(e) {
@@ -147,7 +152,7 @@ const dueDateString = computed(() => {
       <h2 v-if="!props.editable" class="m-0 font-extrabold text-3xl">{{ props.data.title }}</h2>
       <input
         v-else
-        v-model="props.data.title"
+        v-model="localData.title"
         class="m-0 font-extrabold text-3xl w-full border-none outline-none bg-transparent placeholder-gray-400"
         placeholder="Card Title"
       />
@@ -158,7 +163,7 @@ const dueDateString = computed(() => {
         </p>
         <textarea
           v-else
-          v-model="props.data.description"
+          v-model="localData.description"
           class="w-full min-h-[100px] text-gray-600 border-none outline-none bg-transparent resize-none placeholder-gray-400 font-sans"
           placeholder="Add a description..."
         ></textarea>
@@ -177,7 +182,7 @@ const dueDateString = computed(() => {
         <BellElectric size="12" />
         <input
           type="date"
-          v-model="props.data.due"
+          v-model="localData.due"
           class="border-none outline-none bg-transparent text-sm font-mono text-neutral-4"
         />
       </div>
