@@ -50,13 +50,17 @@ export const useCardStore = defineStore('cards', () => {
       if (Array.isArray(parsed)) {
         cards.value = parsed
       }
-    } catch {}
+    } catch (e) {
+      console.error('加载看板卡片失败:', e)
+    }
   }
 
   function save() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cards.value))
-    } catch {}
+    } catch (e) {
+      console.error('保存看板卡片失败:', e)
+    }
   }
 
   function setCardStatus(id, status) {
