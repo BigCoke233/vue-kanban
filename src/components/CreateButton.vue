@@ -9,7 +9,7 @@ const drawer = ref(false)
 const defaultData = {
   title: '',
   description: '',
-  due: new Date(),
+  due: null,
   tags: [],
   priority: 1,
   status: 'To Do'
@@ -75,7 +75,7 @@ function createCard() {
       </section>
 
       <section>
-        <el-button type="plain" class="w-full" text-color="white" @click="createCard">创建</el-button>
+        <el-button type="primary" class="w-full" @click="createCard">创建</el-button>
       </section>
     </el-form>
   </el-drawer>
