@@ -1,0 +1,7 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "vue-kanban",
+  "main": "src/main.js",
+  "compatibility_date": "2025-12-23",
+  "workers_dev": false,
+}
