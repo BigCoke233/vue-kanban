@@ -95,7 +95,7 @@ export const useCardStore = defineStore('cards', () => {
   }
 
   function setCardStatus(id, status) {
-    const card = cards.value.find((c) => c.id === Number(id))
+    const card = cards.value.find((c) => String(c.id) === String(id))
     if (!card) return
     card.status = status
   }
@@ -117,25 +117,42 @@ export const useCardStore = defineStore('cards', () => {
   }
 
   function getCardById(id) {
-    return cards.value.find((card) => card.id === Number(id))
+    return cards.value.find((card) => String(card.id) === String(id))
   }
 
   function create(card) {
+    const maxId = cards.value.reduce((max, c) => {
+      const n = Number(c.id)
+      return !isNaN(n) && n > max ? n : max
+    }, 0)
+    let newId = maxId + 1
+
+    // Deduplication check
+    while (cards.value.some((c) => String(c.id) === String(newId))) {
+      newId++
+    }
+
     const newCard = {
-      id: cards.value.length + 1,
+      id: newId,
       title: card.title || '未命名卡片',
       description: card.description,
       status: card.status || 'To Do',
       tags: card.tags || [],
       priority: card.priority || 1,
       due: card.due,
-      created: new Date(),
+      created: new Date().toISOString(),
     }
     cards.value.push(newCard)
   }
 
+  function updateCard(id, updates) {
+    const card = getCardById(id)
+    if (!card) return
+    Object.assign(card, updates)
+  }
+
   function remove(id) {
-    const index = cards.value.findIndex((c) => c.id === Number(id))
+    const index = cards.value.findIndex((c) => String(c.id) === String(id))
     if (index === -1) return
     cards.value.splice(index, 1)
   }
@@ -165,6 +182,7 @@ export const useCardStore = defineStore('cards', () => {
     getCardById,
     setCardStatus,
     create,
+    updateCard,
     remove,
     addComment,
     removeComment,

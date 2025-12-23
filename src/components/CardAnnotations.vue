@@ -5,7 +5,7 @@ import { useCardStore } from '@/stores/cards'
 
 const props = defineProps({
   cardId: {
-    type: Number,
+    type: [Number, String],
     required: true,
   },
 })

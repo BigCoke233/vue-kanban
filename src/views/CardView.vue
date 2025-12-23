@@ -8,7 +8,7 @@ import { Trash2 } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
-const cardID = Number(route.params.id)
+const cardID = route.params.id
 
 const store = useCardStore()
 const card = computed(() => store.getCardById(cardID))
@@ -25,7 +25,7 @@ const cardColor = computed(() => {
 })
 
 function deleteCard() {
-  if (confirm('Are you sure you want to delete this card?')) {
+  if (confirm('你确定要删除这张卡片吗？')) {
     store.remove(cardID)
     router.push('/')
   }

@@ -14,10 +14,12 @@ function onDrop(e) {
   let id = null
   try {
     id = JSON.parse(json)?.id
-  } catch {}
+  } catch (err) {
+    console.error('拖拽卡片时发生 JSON 解析错误:', err)
+  }
   if (!id) {
     const plain = e.dataTransfer.getData('itemID') || e.dataTransfer.getData('text/plain')
-    if (plain) id = Number(plain)
+    if (plain) id = plain
   }
   if (!id) return
   emit('drop-card', { id, toStatus: props.title })
