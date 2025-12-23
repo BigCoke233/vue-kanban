@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/cloudflare/wrangler/main/wrangler.schema.json",
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "vue-kanban",
   "main": "src/main.js",
   "compatibility_date": "2025-12-23",
